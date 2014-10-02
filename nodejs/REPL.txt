@@ -1,0 +1,211 @@
+REPL(Read-Eval-Print-Loop) : 웹 브라우저의 자바스크립트 콘솔과 유사하게 명령어를 입력하면 바로 실행해 결과를 출력해주는 도구. node에서 사용할 수 있는 모든 코드는 REPL에서도 사용할 수 있다. 간단한 코드 테스트나 문법 확인 용도로 사용가능하며, node라는 명령어를 사용하고, command line 에서 파라미터 없이 node라는 명령어를 입력하면 REPL이 시작된다.
+
+$ node
+> 1
+1
+> var msg = "something"
+undefined
+> msg
+'something'
+> function sum(a, b) { return a + b; }
+undefined
+> sum(3, 4)
+7
+
+$ node
+> process.execPath
+'C:\\Program Files\\node.js\\node.exe'
+> process.cwd()
+'C:\\Program Files\\node.js'
+> process.env
+{ ALLUSERPROFILE: 'C:\\ProgramData',
+  APPDATA: 'C:\\Users\\Administrator\\AppData\\Roaming',
+  CommonProgramFiles: 'C:\\Program Files\\Common Files',
+  COMMPath: 'C:\\Program Files\\Lenovo\\Communications Utility',
+  ... ...
+  VS120COMNTOOLS: 'C:\\Program Files\\Microsoft Visual Studio 12.0\\Common7\\Tools\\',
+  windir: 'C:\\Windows',
+  __COMPAT_LAYER: 'ElevateCreateProcess' }
+> process.version
+'v0.10.32'
+> process.versions
+{ http_parser: '1.0',
+  node: '0.10.32',
+  v8: '3.14.5.9',
+  ares: '1.9.0-DEV',
+  uv: '0.10.28',
+  zlib: '1.2.3',
+  modules: '11',
+  openssl: '1.0.1i' }
+> process.arch
+'ia32'
+> process.memoryUsage()
+{ rss: 11997184,
+  heapTotal: 5066496
+  heapUsed: 2278876 }
+> process.uptime()
+1803
+> process.exit()
+$
+
+$ node
+> var util = require('util');
+undefined
+> util.format('The latest version of the %s is %d', 'node', 0.6);
+The latest version of the node is 0.6.
+> util.isArraty([]);
+true
+> util.isArray({});
+false
+> util.isRegExp(/Regular expression/);
+true
+> util.isDate(new Date());
+true
+> util.isDate('2014.10.01');
+false
+> util.isError(new Error());
+true
+
+$ node
+> new Buffer(10)
+<Buffer 00 00 c8 b2 05 74 f6 7f 00 00>
+> new Buffer([1,2,3])
+<Buffer 01 02 03>
+> new Buffer('string', encoding='utf8')
+<Buffer 73 74 72 69 6e 67>
+
+$ node
+> var buf = new Buffer(256)
+undefined
+> var len = buf.write('\u00bd + \u00bc = \u00be', 0);
+undefined
+> console.log(len + " bytes: " + buf.toString('utf8', 0, len));
+12 bytes: 1/2 + 1/4 = 3/4
+
+$ node
+> var str = "node.js"
+undefined
+> var buf = new Buffer(str.length);
+undefined
+> for (var i = 0; i < str.length; i++) {
+... buf[i] = str.charCodeAt(i);
+... }
+115
+> buf.toString()
+'node.js'
+> Buffer.isBuffer(buf);
+true
+> buf.length
+7
+
+$ node
+> var path = require('path');
+undefined
+> path.normalize('/usr//local//bin/');
+'/usr/local/bin/'
+> path.join('home', 'outsider/nodejs');
+'home/outsider/nodejs'
+> path.resolve(',');
+'C:\\Program Files\\nodejs\\,'
+> path.resolve('../../','examples');
+'C:\\examples'
+> path.relative('../../', '.');
+'Program Files\\nodejs'
+> path.dirname('/home/outsider');
+'/home'
+> path.basename('./watchFile.js');
+'watchFile.js'
+> path.basename('./watchFile.js', '.js');
+'watchFile'
+> path.extname('watchFile.js');
+'.js'
+> path.exists('./watchFile.js', function(exists) {
+... console.log(exists);
+... });
+> true
+> path.exists('./nonExistFile', function(exists) {
+... console.log(exists);
+... });
+undefined
+> false
+
+$ node
+> var url = require('url');
+undefined
+> url.parse('http://domain/tags/search?q=node.js&page=2&year=2014');
+{ protocol: 'http',
+  slashes: true,
+  host: 'domain',
+  port: null,
+  hostname: 'domain',
+  hash: null,
+  search: '?q=node.js&page=2&year=2014',
+  query: 'q=node.js&page=2&year=2014',
+  pathname: '/tags/search',
+  path: '/tags/search?q=node.js&page=2&year=2014',
+  href: 'http://domain/tags/search?q=node.js&page=2&year=2014' }
+
+> url.parse('http://domain/tags/search?q=node.js&page=2&year=2014', true);
+{ protocol: 'http',
+  slashes: true,
+  auth: null
+  host: 'domain',
+  port: null,
+  hostname: 'domain',
+  hash: null,
+  search: '?q=node.js&page=2&year=2014',
+  query:
+  { q: 'node.js',
+    page: '2',
+    year: '2014' },
+  pathname: '/tags/search',
+  path: '/tags/search?q=node.js&page=2&year=2014',
+  href: 'http://domain/tags/search?q=node.js&page=2&year=2014' }
+> url.parse('//domain/search', false);
+{ protocol: null,
+  slashes: null,
+  host: null,
+  port: null,
+  hostname: null,
+  hash: null,
+  search: null,
+  query: null,
+  pathname: '//homain/search',
+  path: '//domain/search',
+  href: '//domain/search' }
+> url.parse('//domain/search', false, true);
+{ protocol: null,
+  slashes: true,
+  auth: null,
+  host: 'domain',
+  port: null,
+  hostname: 'domain',
+  hash: null,
+  search: null,
+  query: null,
+  pathname: '/search',
+  path: '/search',
+  href: '//domain/search' }
+> var obj = url.parse('http://domain/tags/search?q=node.js');
+> url.format(obj);
+
+$ node
+> var qs = require('querystring');
+undefined
+> qs.stringify({q:'nodejs', year:2014});
+'q=nodejs&year=2014'
+> qs.stringify({q:'nodejs', year:2014}, ';');
+'q=nodejs;year=2014'
+> qs.stringify({q:'nodejs', year:2014}, ';', ';');
+'q;nodejs%26year%3D2014'
+> qs.parse('q=nodejs&year=2014');
+{ q: 'nodejs', year: '2014' }
+> qs.parse('q=nodejs&year=2014', ';');
+{ q: 'nodejs&year=2014' }
+> qs.parse('q:nodejs;year:2014', ';', ';');
+{ 'q:nodejs': '',
+  'year:2014': '' }
+> qs.stringify({q:'nodejs', some:'한글'});
+'q=nodejs&some=%ED%95%9C%EA%B8%80'
+> qs.stringify({q:'nodejs', some:'%%'});
+'q=nodejs&some=%25%25'
